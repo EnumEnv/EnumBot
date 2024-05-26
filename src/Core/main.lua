@@ -1,5 +1,5 @@
 -- Core Dependencies --
-local DiscordLuau = require('../Dependencies/DiscordLuau')
+local DiscordLuau = require('../../Dependencies/DiscordLuau')
 
 -- Dependencies --
 local IntentsBuilder = DiscordLuau.IntentsBuilder
@@ -25,9 +25,9 @@ export type SelfType = typeof(Bot) & {
 -- Module Functions --
 --[=[
     Creates a new bot.
-    @return Bot / Self
+    @return Bot / self
 --]=]
-function Bot.new()
+function Bot.new(): SelfType
     local self = {}
 
     local settingsBuilder = DiscordLuau.SettingsBuilder.new(table.unpack(Settings))
@@ -35,7 +35,15 @@ function Bot.new()
 
     self._discordClient = discordClient
 
-    return setmetatable(self, Bot)
+    return setmetatable(self, Bot) :: any
+end
+
+--[=[
+    Connects the bot to the discord API.
+    @rerturn void
+--]=]
+function Bot.Connect(self: SelfType, after: () -> ())
+    self._discordClient:connectAsync():after(after)
 end
 
 --[=[
