@@ -6,7 +6,7 @@ local IntentsBuilder = DiscordLuau.IntentsBuilder
 
 -- Configs --
 local Settings = {
-	"MTI0NDI5MjIzMjY5ODI2NTY5MA.G4w1r3.tl-0-Cu-aCmVD9bJDAGM7CzqeEUgReFw5xLAks",
+	"",
 	IntentsBuilder.fromAll()
 }
 
