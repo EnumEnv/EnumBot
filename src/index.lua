@@ -2,14 +2,10 @@
 local DiscordLuau = require("../Dependencies/DiscordLuau")
 
 -- DISCORD --
-local Settings = {
-	""
-}
-
 local ActivityBuilder = DiscordLuau.ActivityBuilder
 local PresenceBuilder = DiscordLuau.PresenceBuilder
 	
-local SettingsBuilder = DiscordLuau.SettingsBuilder.new(table.unpack(Settings))
+local SettingsBuilder = DiscordLuau.SettingsBuilder.new()
 local DiscordClient = DiscordLuau.DiscordClient.new(SettingsBuilder)
 
 ---- Loading Events ----
