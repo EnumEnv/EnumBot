@@ -6,8 +6,8 @@ local IntentsBuilder = DiscordLuau.IntentsBuilder
 
 -- Configs --
 local Settings = {
-	--"",
-	IntentsBuilder.fromAll()
+	[1] = "",
+	[2] = IntentsBuilder.fromAll()
 }
 
 --[=[
@@ -27,8 +27,12 @@ export type SelfType = typeof(Bot) & {
     Creates a new bot.
     @return Bot / self
 --]=]
-function Bot.new(): SelfType
+function Bot.new(token: string): SelfType
+    assert(token, "No token to be assigned.")
+    
     local self = {}
+
+    Settings[1] = token
 
     local settingsBuilder = DiscordLuau.SettingsBuilder.new(table.unpack(Settings))
     local discordClient = DiscordLuau.DiscordClient.new(settingsBuilder)
@@ -58,4 +62,4 @@ function Bot.GetBot(self: SelfType): DiscordLuau.DiscordClient
 end
 
 -- End --
-return Bot.new()
+return Bot
