@@ -44,7 +44,13 @@ Bot:BindEvent("onInteraction", function(interaction: DiscordLuau.DiscordInteract
 		return
 	end
 
-	
+	local commandExists = Bot:CommandNameExists(interaction.data.name)
+	if not commandExists then
+		return
+	end
+
+	local commandFile = Bot:GetCommand(interaction.data.name)
+	commandFile.Execute(interaction)
 end)
 
 --// Connecting to API
