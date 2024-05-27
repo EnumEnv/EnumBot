@@ -1,16 +1,26 @@
+-- Dependencies --
 local DiscordLuau = require("../../Dependencies/DiscordLuau")
 local FS = require("@lune/FS")
 
+-- DiscordLuau Dependencies --
 local DiscordCommandBuilder = DiscordLuau.CommandBuilder
 local PermissionBuilder = DiscordLuau.PermissionsBuilder
 
+-- Module --
 local CommandBuilder = {}
 CommandBuilder.__index = CommandBuilder
 
+-- Types --
 export type SelfType = typeof(CommandBuilder) & {
 	_registeredCommands: { any },
 }
 
+-- Local Functions --
+--[=[
+	Creates a slash command from the given information.
+	@param info table -- The table containing command information such as Name, Description, Permissions, ContextType, and Type.
+	@returns DiscordLuau.CommandBuilder -- The created slash command.
+--]=]
 local function CreateSlashCommand(info: { [string]: any })
 	local permissionsFormatted = PermissionBuilder.new()
 
@@ -28,6 +38,11 @@ local function CreateSlashCommand(info: { [string]: any })
 	return slashCommand
 end
 
+--[=[
+	Checks if a file name ends with ".luau".
+	@param name string -- The file name to check.
+	@returns boolean -- True if the file name ends with ".luau", false otherwise.
+--]=]
 local function EndsWithLuau(name: string)
 	local split = string.split(name, ".")
 
@@ -40,6 +55,12 @@ local function EndsWithLuau(name: string)
 	return false
 end
 
+-- Module Functions --
+--[=[
+	Creates a new instance of CommandBuilder.
+	@param discordClient DiscordLuau.DiscordClient -- The Discord client to associate with this command builder.
+	@returns SelfType -- The new instance of CommandBuilder.
+--]=]
 function CommandBuilder.new(discordClient: DiscordLuau.DiscordClient): SelfType
 	local self = { _registeredCommands = {} }
 
@@ -48,14 +69,29 @@ function CommandBuilder.new(discordClient: DiscordLuau.DiscordClient): SelfType
 	return setmetatable(self, CommandBuilder) :: any
 end
 
+--[=[
+	Gets the list of registered commands.
+	@param self SelfType -- The instance of CommandBuilder.
+	@returns table -- The list of registered commands.
+--]=]
 function CommandBuilder.GetCommands(self: SelfType)
 	return self._registeredCommands
 end
 
+--[=[
+	Adds a slash command to the list of registered commands.
+	@param self SelfType -- The instance of CommandBuilder.
+	@param command table -- The command information to add.
+--]=]
 function CommandBuilder.AddSlashCommand(self: SelfType, command)
 	table.insert(self._registeredCommands, CreateSlashCommand(command))
 end
 
+--[=[
+	Adds slash commands from the specified directory.
+	@param self SelfType -- The instance of CommandBuilder.
+	@param directory string -- The directory to load commands from.
+--]=]
 function CommandBuilder.AddSlashCommandsFromDirectory(self: SelfType, directory: string)
 	for _, commandName in FS.readDir(directory) do
 		if EndsWithLuau(commandName) then

@@ -1,14 +1,18 @@
+-- Dependencies --
 local DiscordLuau = require("../../Dependencies/DiscordLuau")
 local Settings = require("../settings")
 local CommandBuilder = require("CommandBuilder")
 
+-- DiscordLuau Dependencies --
 local DiscordIntentsBuilder = DiscordLuau.IntentsBuilder
 local DiscordSettingsBuilder = DiscordLuau.SettingsBuilder
 local DiscordClient = DiscordLuau.DiscordClient
 
+-- Module --
 local Bot = {}
 Bot.__index = Bot
 
+-- Types --
 export type SelfType = typeof(Bot) & {
 	_applicationId: string,
 	_clientId: string,
@@ -25,6 +29,14 @@ export type CommandType = {
 	Type: string,
 }
 
+-- Module Functions --
+--[=[
+	Creates a new instance of the Bot.
+	@param token string -- The bot token used to authenticate with Discord.
+	@param applicationId string -- The application ID of the bot.
+	@param clientId string -- The client ID of the bot.
+	@returns SelfType -- The new instance of the Bot.
+--]=]
 function Bot.new(token: string, applicationId: string, clientId: string): SelfType
 	local self = {}
 
@@ -43,22 +55,47 @@ function Bot.new(token: string, applicationId: string, clientId: string): SelfTy
 	return setmetatable(self, Bot) :: any
 end
 
+--[=[
+	Binds an event to the bot.
+	@param self SelfType -- The instance of the bot.
+	@param eventName string -- The name of the event to bind.
+	@param callback function -- The callback function to execute when the event is triggered.
+--]=]
 function Bot.BindEvent(self: SelfType, eventName: string, callback: () -> ())
 	self._discordClient.eventManager[eventName]:connect(callback)
 end
 
+--[=[
+	Connects the bot to Discord.
+	@param self SelfType -- The instance of the bot.
+	@param after function -- The function to execute after the bot is connected.
+--]=]
 function Bot.Connect(self: SelfType, after: () -> ())
 	self._discordClient:connectAsync():after(after)
 end
 
+--[=[
+	Loads commands from a specified directory.
+	@param self SelfType -- The instance of the bot.
+	@param customDirectory string? -- The custom directory to load commands from. Defaults to "./src/Bot/Commands".
+--]=]
 function Bot.LoadCommands(self: SelfType, customDirectory: string?)
 	self._commandBuilder:AddSlashCommandsFromDirectory("./src/Bot/Commands" or customDirectory)
 end
 
+--[=[
+	Loads a single command.
+	@param self SelfType -- The instance of the bot.
+	@param command CommandType -- The command to load.
+--]=]
 function Bot.LoadCommand(self: SelfType, command: CommandType)
 	self._commandBuilder:AddSlashCommand(command)
 end
 
+--[=[
+	Registers all loaded commands on the guild.
+	@param self SelfType -- The instance of the bot.
+--]=]
 function Bot.RegisterCommandsOnGuild(self: SelfType)
 	local commands = self._commandBuilder:GetCommands()
 
@@ -71,6 +108,12 @@ function Bot.RegisterCommandsOnGuild(self: SelfType)
 	end)
 end
 
+--[=[
+	Updates the bot's presence.
+	@param self SelfType -- The instance of the bot.
+	@param presence DiscordLuau.PresenceBuilder -- The presence to set for the bot.
+	@param after function -- The function to execute after the presence is updated.
+--]=]
 function Bot.UpdatePresence(self: SelfType, presence: DiscordLuau.PresenceBuilder, after: () -> ())
 	self._discordClient:updatePresenceAsync(presence):after(after)
 end
