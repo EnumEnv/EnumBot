@@ -31,6 +31,10 @@ function Bot.new(token: string, applicationId: string, clientId: string): SelfTy
 	return setmetatable(self, Bot) :: any
 end
 
+function Bot.BindEvent(self: SelfType, eventName: string, callback: () -> ())
+	self._discordClient.eventManager[eventName]:connect(callback)
+end
+
 function Bot.Connect(self: SelfType, after: () -> ())
 	self._discordClient:connectAsync():after(after)
 end

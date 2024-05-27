@@ -13,10 +13,8 @@ local Settings = require("settings")
 local Bot = require("Bot")
 
 -- Initializing The Bot --
---// Connecting to API
-Bot:Connect(function()
-	print("<< Connected to Discord API >>")
-
+--// Connecting Events
+Bot:BindEvent("onReady", function()
 	--// Creating Presence
 	local newActivity = ActivityBuilder.new()
 		:setActivityName(Settings.DEFAULT_PRESENCE_INFO.Content)
@@ -31,6 +29,11 @@ Bot:Connect(function()
 	Bot:UpdatePresence(newPresence, function()
 		print("<< Updated DiscordClient Presence >>")
 	end)
+end)
+
+--// Connecting to API
+Bot:Connect(function()
+	print("<< Connected to Discord API >>")
 end)
 
 return { Bot, Settings }
