@@ -35,4 +35,8 @@ function Bot.Connect(self: SelfType, after: () -> ())
 	self._discordClient:connectAsync():after(after)
 end
 
+function Bot.UpdatePresence(self: SelfType, presence: DiscordLuau.PresenceBuilder, after: () -> ())
+	self._discordClient:updatePresenceAsync(presence):after(after)
+end
+
 return Bot.new(settings.TOKEN, settings.APPLICATION_ID, settings.CLIENT_ID)
