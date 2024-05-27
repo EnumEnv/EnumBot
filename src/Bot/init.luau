@@ -14,6 +14,7 @@ export type SelfType = typeof(Bot) & {
 	_clientId: string,
 	_token: string,
 	_discordClient: DiscordLuau.DiscordClient,
+	_commandBuilder: CommandBuilder.SelfType,
 }
 
 export type CommandType = {
@@ -37,6 +38,7 @@ function Bot.new(token: string, applicationId: string, clientId: string): SelfTy
 	self._clientId = clientId
 	self._token = token
 	self._discordClient = discordClient
+	self._commandBuilder = CommandBuilder.new(discordClient)
 
 	return setmetatable(self, Bot) :: any
 end
@@ -49,13 +51,12 @@ function Bot.Connect(self: SelfType, after: () -> ())
 	self._discordClient:connectAsync():after(after)
 end
 
-function Bot.LoadCommands(customDirectory: string)
-	CommandBuilder:AddSlashCommandsFromDirectory("Commands" or customDirectory)
-	print(CommandBuilder:GetCommands())
+function Bot.LoadCommands(self: SelfType, customDirectory: string?)
+	self._commandBuilder:AddSlashCommandsFromDirectory("./src/Bot/Commands" or customDirectory)
 end
 
-function Bot.LoadCommand(command: CommandType)
-	CommandBuilder:AddSlashCommand(command)
+function Bot.LoadCommand(self: SelfType, command: CommandType)
+	self._commandBuilder:AddSlashCommand(command)
 end
 
 function Bot.UpdatePresence(self: SelfType, presence: DiscordLuau.PresenceBuilder, after: () -> ())

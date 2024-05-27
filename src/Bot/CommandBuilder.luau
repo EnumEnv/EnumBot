@@ -30,14 +30,21 @@ local function CreateSlashCommand(info: { [string]: any })
 end
 
 local function EndsWithLuau(name: string)
-    return string.sub(name, #name-4,#name) == "luau"
+    local split = string.split(name, ".")
+    
+    if split[2] then
+        if split[2] == "luau" then
+            return true
+        end
+    end
+
+    return false
 end
 
 function CommandBuilder.new(discordClient: DiscordLuau.DiscordClient): SelfType
-    local self = {}
+    local self = { _registeredCommands = {} }
 
     self._discordClient = discordClient
-    self._registeredCommands = {}
 
     return setmetatable(self, CommandBuilder) :: any
 end
@@ -53,7 +60,7 @@ end
 function CommandBuilder.AddSlashCommandsFromDirectory(self: SelfType, directory: string)
     for _,commandName in FS.readDir(directory) do
         if EndsWithLuau(commandName) then
-            local commandFile = require(directory..'/'..string.split(commandName,".")[1])
+            local commandFile = require(string.sub(directory,11,#directory)..'/'..commandName)
 
             self:AddSlashCommand(commandFile)
         end
