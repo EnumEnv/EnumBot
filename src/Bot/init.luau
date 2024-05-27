@@ -50,11 +50,12 @@ function Bot.Connect(self: SelfType, after: () -> ())
 end
 
 function Bot.LoadCommands(customDirectory: string)
-	CommandBuilder.AddSlashCommandsFromDirectory("Commands" or customDirectory)
+	CommandBuilder:AddSlashCommandsFromDirectory("Commands" or customDirectory)
+	print(CommandBuilder:GetCommands())
 end
 
 function Bot.LoadCommand(command: CommandType)
-	CommandBuilder.AddSlashCommand(command)
+	CommandBuilder:AddSlashCommand(command)
 end
 
 function Bot.UpdatePresence(self: SelfType, presence: DiscordLuau.PresenceBuilder, after: () -> ())
