@@ -35,6 +35,7 @@ Bot:BindEvent("onReady", function()
 
 	--// Command Building
 	Bot:LoadCommands()
+	Bot:RegisterCommandsOnGuild()
 end)
 
 --// Connecting to API

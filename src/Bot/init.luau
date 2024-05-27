@@ -59,6 +59,20 @@ function Bot.LoadCommand(self: SelfType, command: CommandType)
 	self._commandBuilder:AddSlashCommand(command)
 end
 
+function Bot.RegisterCommandsOnGuild(self: SelfType)
+	local commands = self._commandBuilder:GetCommands()
+
+	self._discordClient.discordApplication
+		:setSlashCommandsAsync(commands)
+		:after(function(data)
+			print("Commands updated! Fetching current...")
+
+			DiscordClient.discordApplication:fetchSlashCommandsAsync():after(function(...)
+				print("Commands have been fetched!")
+			end)
+		end)
+end
+
 function Bot.UpdatePresence(self: SelfType, presence: DiscordLuau.PresenceBuilder, after: () -> ())
 	self._discordClient:updatePresenceAsync(presence):after(after)
 end

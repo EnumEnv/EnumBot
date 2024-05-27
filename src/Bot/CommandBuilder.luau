@@ -25,7 +25,7 @@ local function CreateSlashCommand(info: { [string]: any })
 		:setGuildPermissions(permissionsFormatted)
 		:addContext(DiscordCommandBuilder.Context[info.ContextType])
 		:setType(DiscordCommandBuilder.Type[info.Type])
-
+    
     return slashCommand
 end
 
