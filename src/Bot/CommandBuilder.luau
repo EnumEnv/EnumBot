@@ -1,5 +1,8 @@
 local DiscordLuau = require('../../Dependencies/DiscordLuau')
 
+local DiscordCommandBuilder = DiscordLuau.CommandBuilder
+local PermissionBuilder = DiscordLuau.PermissionsBuilder
+
 local CommandBuilder = {}
 CommandBuilder.__index = CommandBuilder
 
@@ -11,6 +14,14 @@ function CommandBuilder.new(discordClient: DiscordLuau.DiscordClient): SelfType
     self._discordClient = discordClient
 
     return setmetatable(self, CommandBuilder) :: any
+end
+
+function CommandBuilder.AddSlashCommand(command)
+
+end
+
+function CommandBuilder.AddSlashCommandsFromDirectory(directory: string)
+    
 end
 
 return CommandBuilder

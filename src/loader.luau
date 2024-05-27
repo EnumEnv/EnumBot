@@ -16,6 +16,8 @@ local Bot = require("Bot")
 --// Connecting Events
 --/ OnReady
 Bot:BindEvent("onReady", function()
+	print("<< DiscordClient is ready >>")
+
 	--// Creating Presence
 	local newActivity = ActivityBuilder.new()
 		:setActivityName(Settings.DEFAULT_PRESENCE_INFO.Content)
@@ -31,8 +33,7 @@ Bot:BindEvent("onReady", function()
 		print("<< Updated DiscordClient Presence >>")
 	end)
 
-    --// Command Building
-    
+	--// Command Building
 end)
 
 --// Connecting to API
