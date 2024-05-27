@@ -25,7 +25,6 @@ local function CreateSlashCommand(info: { [string]: any })
 		:addContext(DiscordCommandBuilder.Context[info.ContextType])
 		:setType(DiscordCommandBuilder.Type[info.Type])
 
-	print(slashCommand)
 	return slashCommand
 end
 
