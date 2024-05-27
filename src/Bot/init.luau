@@ -65,7 +65,7 @@ function Bot.RegisterCommandsOnGuild(self: SelfType)
 	self._discordClient.discordApplication:setSlashCommandsAsync(commands):after(function(data)
 		print("Commands updated! Fetching current...")
 
-		DiscordClient.discordApplication:fetchSlashCommandsAsync():after(function(...)
+		self._discordClient.discordApplication:fetchSlashCommandsAsync():after(function(...)
 			print("Commands have been fetched!")
 		end)
 	end)

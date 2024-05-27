@@ -1,7 +1,7 @@
 return {
 	-- Basic --
 	Name = "ping",
-	Description = [[]],
+	Description = [[description]],
 
 	-- Permissions --
 	Permissions = { "UseApplicationCommands" },
