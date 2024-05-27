@@ -2,6 +2,7 @@
 local DiscordLuau = require("../../Dependencies/DiscordLuau")
 local Settings = require("../settings")
 local CommandBuilder = require("CommandBuilder")
+local FS = require("@lune/FS")
 
 -- DiscordLuau Dependencies --
 local DiscordIntentsBuilder = DiscordLuau.IntentsBuilder
@@ -28,6 +29,24 @@ export type CommandType = {
 	ContextType: string,
 	Type: string,
 }
+
+-- Local Functions --
+--[=[
+	Checks if a file name ends with ".luau".
+	@param name string -- The file name to check.
+	@returns boolean -- True if the file name ends with ".luau", false otherwise.
+--]=]
+local function EndsWithLuau(name: string)
+	local split = string.split(name, ".")
+
+	if split[2] then
+		if split[2] == "luau" then
+			return true
+		end
+	end
+
+	return false
+end
 
 -- Module Functions --
 --[=[
@@ -90,6 +109,46 @@ end
 --]=]
 function Bot.LoadCommand(self: SelfType, command: CommandType)
 	self._commandBuilder:AddSlashCommand(command)
+end
+
+--[=[
+	Checks if the certain command exists.
+	@param name string -- The command to check for.
+	@return boolean -- If it exists or not.
+--]=]
+function Bot.CommandNameExists(self: SelfType, name: string)
+	local commands = FS.readDir("./src/Bot/Commands")
+
+	for _, commandName in commands do
+		if EndsWithLuau(commandName) then
+			if string.lower(string.split(commandName, ".")[1]) == string.lower(name) then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+--[=[
+	Retrieves a command file (already required)
+	@param name string -- The command name.
+	@return Command
+--]=]
+function Bot.GetCommand(self: SelfType, name: string)
+	local commands = FS.readDir("./src/Bot/Commands")
+
+	for _, commandName in commands do
+		if EndsWithLuau(name) then
+			if string.lower(string.split(commandName, ".")[1]) == string.lower(name) then
+				local file = require("./src/Bot/Commands/" .. commandName)
+
+				return file
+			end
+		end
+	end
+
+	return
 end
 
 --[=[

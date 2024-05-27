@@ -38,6 +38,15 @@ Bot:BindEvent("onReady", function()
 	Bot:RegisterCommandsOnGuild()
 end)
 
+--/ OnInteraction
+Bot:BindEvent("onInteraction", function(interaction: DiscordLuau.DiscordInteraction?)
+	if not interaction then
+		return
+	end
+
+	
+end)
+
 --// Connecting to API
 Bot:Connect(function()
 	print("<< Connected to Discord API >>")
